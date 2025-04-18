@@ -25,7 +25,7 @@ class Customer {
             """;
 
         for (Rental rental : rentals) {
-            double thisAmount = amountFor(rental);
+            double thisAmount = rental.getCharge();
 
             frequentRenterPoints++;
 
@@ -41,25 +41,5 @@ class Customer {
         return result;
     }
 
-    private double amountFor(Rental each) {
-        double thisAmount = 0;
-        thisAmount = switch (each.getMovie().getPriceCode()) {
-            case Movie.REGULAR -> {
-                double amount = 2;
-                if (each.getDaysRented() > 2)
-                    amount += (each.getDaysRented() - 2) * 1.5;
-                yield amount;
-            }
-            case Movie.NEW_RELEASE -> each.getDaysRented() * 3;
-            case Movie.CHILDRENS -> {
-                double amount = 1.5;
-                if (each.getDaysRented() > 3)
-                    amount += (each.getDaysRented() - 3) * 1.5;
-                yield amount;
-            }
-            default -> throw new IllegalArgumentException("Invalid price code: " + each.getMovie().getPriceCode());
-        };
-        return thisAmount;
-    }
 
 }
