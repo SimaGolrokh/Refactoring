@@ -12,25 +12,27 @@ class Customer {
     public void addRental(Rental rental) {
         rentals.add(rental);
     };
-    public String getName (){
+    public String getName(){
         return name;
     };
     public String statement() {
         double totalAmount = 0;
         int frequentRenterPoints = 0;
 
-        String result = "Rental Record for " + this.getName() + "\n";
-        result += "\t" + "Title" + "\t" + "\t" + "Days" + "\t" + "Amount" + "\n";
+        String result = "Rental Record for " + getName() + "\n";
+        result += """
+            \tTitle\t\tDays\tAmount
+            """;
 
-        for (Rental each : rentals) {
-            double thisAmount = amountFor(each);
+        for (Rental rental : rentals) {
+            double thisAmount = amountFor(rental);
 
             frequentRenterPoints++;
 
-            if ((each.getMovie().getPriceCode() == Movie.NEW_RELEASE) && each.getDaysRented() > 1)
+            if ((rental.getMovie().getPriceCode() == Movie.NEW_RELEASE) && rental.getDaysRented() > 1)
                 frequentRenterPoints++;
 
-            result += "\t" + each.getMovie().getTitle() + "\t" + "\t" + each.getDaysRented() + "\t" + thisAmount + "\n";
+            result += "\t" + rental.getMovie().getTitle() + "\t" + "\t" + rental.getDaysRented() + "\t" + thisAmount + "\n";
             totalAmount += thisAmount;
         }
         //add footer lines
@@ -41,21 +43,22 @@ class Customer {
 
     private double amountFor(Rental each) {
         double thisAmount = 0;
-        switch (each.getMovie().getPriceCode()) {
-            case Movie.REGULAR:
-                thisAmount += 2;
+        thisAmount = switch (each.getMovie().getPriceCode()) {
+            case Movie.REGULAR -> {
+                double amount = 2;
                 if (each.getDaysRented() > 2)
-                    thisAmount += (each.getDaysRented() - 2) * 1.5;
-                break;
-            case Movie.NEW_RELEASE:
-                thisAmount += each.getDaysRented() * 3;
-                break;
-            case Movie.CHILDRENS:
-                thisAmount += 1.5;
+                    amount += (each.getDaysRented() - 2) * 1.5;
+                yield amount;
+            }
+            case Movie.NEW_RELEASE -> each.getDaysRented() * 3;
+            case Movie.CHILDRENS -> {
+                double amount = 1.5;
                 if (each.getDaysRented() > 3)
-                    thisAmount += (each.getDaysRented() - 3) * 1.5;
-                break;
-        }
+                    amount += (each.getDaysRented() - 3) * 1.5;
+                yield amount;
+            }
+            default -> throw new IllegalArgumentException("Invalid price code: " + each.getMovie().getPriceCode());
+        };
         return thisAmount;
     }
 
