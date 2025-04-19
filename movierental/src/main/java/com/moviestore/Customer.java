@@ -1,6 +1,7 @@
+package movierental.src;
+
 import java.util.ArrayList;
 import java.util.List;
-
 
 class Customer {
     private final String name;

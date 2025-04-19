@@ -1,3 +1,4 @@
+package com.moviestore;
 
 /**
  * Note that Java console applications need to be run through the java runtime

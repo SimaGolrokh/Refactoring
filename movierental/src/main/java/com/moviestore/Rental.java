@@ -1,3 +1,7 @@
+// Package declaration
+package com.moviestore;
+
+
 class Rental {
     private final Movie movie;
     private final int daysRented;
