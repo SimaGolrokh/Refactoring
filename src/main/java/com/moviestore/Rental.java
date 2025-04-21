@@ -13,22 +13,8 @@ class Rental {
         return movie;
     }
     public double getCharge() {
-        return switch (movie.getPriceCode()) {
-            case Movie.REGULAR -> {
-                double amount = 2;
-                if (daysRented > 2)
-                    amount += (daysRented - 2) * 1.5;
-                yield amount;
-            }
-            case Movie.NEW_RELEASE -> daysRented * 3;
-            case Movie.CHILDRENS -> {
-                double amount = 1.5;
-                if (daysRented > 3)
-                    amount += (daysRented - 3) * 1.5;
-                yield amount;
-            }
-            default -> throw new IllegalArgumentException("Invalid price code: " + movie.getPriceCode());
-        };
+        return movie.getCharge(daysRented);
     }
+    
     
 }
