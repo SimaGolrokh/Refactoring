@@ -26,18 +26,15 @@ class Customer {
 
         for (Rental rental : rentals) {
             double thisAmount = rental.getCharge();
-
-            frequentRenterPoints++;
-
-            if ((rental.getMovie().getPriceCode() == Movie.NEW_RELEASE) && rental.getDaysRented() > 1) {
-                frequentRenterPoints++;
-            }
+            frequentRenterPoints += rental.getFrequentRenterPoints();
+        
             result.append(String.format("%-20s\t%3d\t%.1f\n",
                 rental.getMovie().getTitle(),
                 rental.getDaysRented(),
-                rental.getCharge()));
-                totalAmount += thisAmount;
+                thisAmount));
+            totalAmount += thisAmount;
         }
+        
         //add footer lines
         result.append("Amount owed is ").append(totalAmount).append("\n");
         result.append("You earned ").append(frequentRenterPoints).append(" frequent renter points");
