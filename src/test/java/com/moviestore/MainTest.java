@@ -7,28 +7,25 @@ import org.junit.jupiter.api.Test;
 public class MainTest {
 
     @Test
-    public void testMovie() {
-        Movie movie = new Movie("Inception", Movie.REGULAR);
+    public void testMovieTitle() {
+        Movie movie = new RegularMovie("Inception");
         assertEquals("Inception", movie.getTitle());
-
-        movie.setPriceCode(Movie.NEW_RELEASE);
-        assertEquals(Movie.NEW_RELEASE, movie.getPriceCode());
     }
 
     @Test
-    public void testRental() {
-        Movie movie = new Movie("Frozen", Movie.CHILDRENS);
+    public void testRentalCharge() {
+        Movie movie = new ChildrensMovie("Frozen");
         Rental rental = new Rental(movie, 4);
         double charge = rental.getCharge();
-        assertTrue(charge > 0);
+        assertEquals(3.0, charge, 0.01); // 1.5 + (4 - 3) * 1.5 = 3.0
     }
 
     @Test
     public void testCustomerStatement() {
-        Movie movie1 = new Movie("The Matrix", Movie.NEW_RELEASE);
-        Movie movie2 = new Movie("Cars", Movie.CHILDRENS);
-        Rental rental1 = new Rental(movie1, 3);
-        Rental rental2 = new Rental(movie2, 5);
+        Movie movie1 = new NewReleaseMovie("The Matrix");
+        Movie movie2 = new ChildrensMovie("Cars");
+        Rental rental1 = new Rental(movie1, 3); // 3 * 3 = 9.0
+        Rental rental2 = new Rental(movie2, 5); // 1.5 + (5 - 3) * 1.5 = 4.5
         Customer customer = new Customer("Alice");
         customer.addRental(rental1);
         customer.addRental(rental2);
@@ -37,11 +34,13 @@ public class MainTest {
         assertTrue(statement.contains("Rental Record for Alice"));
         assertTrue(statement.contains("The Matrix"));
         assertTrue(statement.contains("Cars"));
+        assertTrue(statement.contains("Amount owed is 13.5"));
+        assertTrue(statement.contains("You earned 3 frequent renter points")); // 2 + 1
     }
 
     @Test
     public void testProgramRuns() {
-        // Just simulates that the Program runs without exceptions
+        // Just ensures that Program.main runs without crashing
         Program.main(new String[]{});
     }
 }
